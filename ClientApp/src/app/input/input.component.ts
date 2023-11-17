@@ -3,7 +3,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild  } from '@angular/core'
 import { IFile } from '../models/file';
 import { OpenAIService, Message } from './inputApiCall';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-
+import { simpleModeConfig } from './simpleModeConfig';
 //TODO limit
 
 @Component({
@@ -21,18 +21,19 @@ export class InputComponent implements OnInit {
 
   constructor(private elementRef:ElementRef, private readonly openAiService:OpenAIService ) { }
   
-  @ViewChild('gptgenerate') gptgenerate: any; 
+  @ViewChild('gptgenerate') gptgenerate!: any; 
 
+  simpleModeConfig = simpleModeConfig;
+  public editorContent: string = "[CODE GPT]"; // Assuming it's a string
 
   ngOnInit(): void {
-    this.editorContent = "Hi! Welcome to Code GPT. Edit this and enter your query..."
+    this.editorContent = "[USER]"
   }
   
   //Enter your api key here...
   apiKey = ''
 
   lastEnteredMessage = '';
-  editorContent = '';
   apiResponse = '';
   
   allowedKeys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]{}|;:'\",.<>?/\\~`-= ";
@@ -58,7 +59,7 @@ export class InputComponent implements OnInit {
     console.log('Selected Files:', this.selectedFiles);
     this.editorContent += '\n';
     let filesData = this.collateSelectedFilesData();
-    let message = filesData.length == 0 ? this.lastEnteredMessage : this.lastEnteredMessage + filesData;
+    let message = filesData.length == 0 ? this.lastEnteredMessage + '\n' : this.lastEnteredMessage + filesData;
     this.doOpenAICall(message);
     this.lastEnteredMessage = '';
   }
@@ -77,8 +78,13 @@ export class InputComponent implements OnInit {
     if (event.index === 2){    
       if (this.gptgenerate && this.gptgenerate.codeMirror) {
         this.gptgenerate.codeMirror.setValue(this.editorContent);
+        this.gptgenerate.codeMirror.setOption('mode', {
+          name: 'simplemode',
+          config: simpleModeConfig,
+        });
       }
-  }}
+    }
+  }
   selectLine(lineNumber) {
     console.log(lineNumber);
     let code = this.elementRef.nativeElement.querySelectorAll('.CodeMirror-code')[0];
@@ -115,7 +121,8 @@ export class InputComponent implements OnInit {
       apiResponse = partialResponse;
     }, null, () => {
       console.log(apiResponse);
-      this.editorContent += "Gpt Response: " + apiResponse + '\n';
+      this.editorContent += "[CODE GPT] " + apiResponse + '\n' + "[USER]";
+      console.log(this.editorContent);
     });
 
   }

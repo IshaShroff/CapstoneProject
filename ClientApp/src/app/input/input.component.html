@@ -38,9 +38,13 @@
               </div>
         </div>
         <ngx-codemirror #gptgenerate [(ngModel)]="editorContent" [options]="{
+          lineWrapping: true,
+          mode: {
+            name: 'simplemode',
+            config: simpleModeConfig
+          },
           theme: 'material',
           viewportMargin: '20',
-          lineWrapping: true,
           extraKeys: {
             Enter: false
           }

@@ -52,3 +52,19 @@ mat-form-field{
   padding: 2%;
 }
 
+/*codemirror simple addon tags*/
+.cm-s-material .cm-system-tag {
+  color: yellow; /* Set the color for [SYSTEM] tag */
+}
+
+.cm-s-material .cm-user-tag {
+  color: red; /* Set the color for [USER] tag */
+}
+
+.cm-s-material .CodeMirror-line span.cm-gpt-response-tag {
+  color: blue !important; /* Set the color for [CODE GPT] tag */
+}
+
+.CodeMirror-sizer .cm-overlay .cm-gpt-response-tag {
+  color: blue !important;
+}

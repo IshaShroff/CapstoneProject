@@ -1,5 +1,6 @@
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/shell/shell';
+import 'codemirror/addon/mode/simple';
 
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
